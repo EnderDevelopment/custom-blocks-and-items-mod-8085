@@ -1,0 +1,44 @@
+plugins {
+    id 'fabric-loom' version '1.1-SNAPSHOT'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+extraProperties {
+    loomVersion = '1.1-SNAPSHOT'
+}
+
+dependencies {
+    minecraft 'com.mojang:minecraft:1.20.4'
+    mappings 'net.fabricmc:yarn:1.20.4+build.1:v2'
+    modImplementation 'net.fabricmc:fabric-loader:0.14.21'
+}
+
+loom {
+    refreshDeps {
+        refresh {
+            dependsOn 'build'
+        }
+    }
+
+    ide {
+        runDir = project.file('run')
+    }
+
+    run {
+        version = '1.20.4'
+        propertyMap = [
+        'fabric-api:fabricLoader': project.dependencies.getArtifacts().find {
+            it.name == 'fabric-loader'
+        }.version,
+        'fabric-api:minecraft': '1.20.4'
+        ]
+    }
+}
